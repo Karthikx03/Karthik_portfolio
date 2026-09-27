@@ -102,7 +102,7 @@ const issuerIcons: Record<string, string> = {
 export const CertificationsSection: React.FC = () => {
   return (
     <section
-      id="certifications"
+      id="achievements"
       className="relative w-full bg-black text-[#E8DFD8] font-sans selection:bg-[#cbb59d] selection:text-black pt-16 pb-24 px-6 sm:px-12 lg:px-20 overflow-hidden"
     >
       {/* Ambient Glows */}
@@ -123,7 +123,7 @@ export const CertificationsSection: React.FC = () => {
             className="text-[11px] font-medium tracking-[0.35em] uppercase text-[#D4AF37]"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
-            06 / RESEARCH & ACHIEVEMENTS
+            05 / ACHIEVEMENTS &amp; RESEARCH
           </span>
           <div className="w-20 h-[1px] bg-gradient-to-r from-[#D4AF37]/80 via-[#8C6D4F]/40 to-transparent" />
         </motion.div>

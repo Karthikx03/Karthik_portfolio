@@ -163,7 +163,7 @@ export const SkillsSection: React.FC = () => {
             className="text-[11px] font-medium tracking-[0.35em] uppercase text-[#D4AF37]"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
-            04 / CORE EXPERTISE
+            03 / CORE EXPERTISE
           </span>
           <div className="w-20 h-[1px] bg-gradient-to-r from-[#D4AF37]/80 via-[#8C6D4F]/40 to-transparent" />
         </motion.div>

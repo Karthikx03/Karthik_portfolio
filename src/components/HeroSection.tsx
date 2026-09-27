@@ -32,7 +32,8 @@ const navItems = [
   { name: 'PROJECTS', href: '#work' },
   { name: 'SKILLS', href: '#skills' },
   { name: 'EXPERIENCE', href: '#experience' },
-  { name: 'CONTACT', href: '#contact' },
+  { name: 'ACHIEVEMENTS', href: '#achievements' },
+  { name: 'EDUCATION', href: '#education' },
 ];
 
 export const HeroSection: React.FC = () => {
@@ -214,13 +215,16 @@ export const HeroSection: React.FC = () => {
 
           {/* Right Action — Desktop */}
           <a
-            href="#contact"
+            href="https://www.linkedin.com/in/karthikeyan-p-396412321"
+            target="_blank"
+            rel="noopener noreferrer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className="hidden md:flex group items-center space-x-2 text-[11px] tracking-[0.24em] font-light uppercase py-2 px-4 border border-[#8C6D4F]/50 hover:border-[#D4AF37] text-[#EAD8C7] transition-all duration-300 backdrop-blur-sm"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
+            aria-label="LinkedIn Profile"
           >
-            <span>LET&apos;S TALK</span>
+            <span>LINKEDIN</span>
             <span className="transform transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-xs">
               ↗
             </span>

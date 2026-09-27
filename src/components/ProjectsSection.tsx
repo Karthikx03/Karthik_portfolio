@@ -118,7 +118,7 @@ const projects: Project[] = [
 
 // Shared card inner component
 const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
-  <div className="relative w-full rounded-2xl border border-[#8C6D4F]/60 bg-[#0C0A08] p-6 sm:p-9 lg:p-10 shadow-[0_35px_100px_rgba(0,0,0,0.99)] group overflow-hidden transition-all duration-500 hover:border-[#D4AF37]">
+  <div className="relative w-full rounded-2xl border border-[#8C6D4F]/60 bg-[#0C0A08] p-6 sm:p-8 lg:py-6 lg:px-8 shadow-[0_25px_70px_rgba(0,0,0,0.98)] group overflow-hidden transition-all duration-500 hover:border-[#D4AF37]">
 
     {/* Top Gold Border Flare */}
     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/80 to-transparent" />
@@ -144,7 +144,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
       <div className="lg:col-span-7 flex flex-col justify-between">
         <div>
           {/* Number + Category */}
-          <div className="flex flex-col xs:flex-row xs:items-center xs:space-x-3 space-y-1 xs:space-y-0 mb-2">
+          <div className="flex flex-col xs:flex-row xs:items-center xs:space-x-3 space-y-1 xs:space-y-0 mb-1.5">
             <span className="text-xs font-mono font-bold text-[#D4AF37]">
               {project.number} //
             </span>
@@ -154,7 +154,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
           </div>
 
           {/* Company Badge */}
-          <div className="mb-2.5">
+          <div className="mb-2">
             <span
               className="inline-block text-[8px] sm:text-[9px] font-medium tracking-[0.18em] sm:tracking-[0.2em] uppercase text-[#C99E5D] border border-[#C99E5D]/30 px-2 py-0.5 rounded-sm"
               style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -165,13 +165,13 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
 
           {/* Title */}
           <h3
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-normal tracking-tight text-white mb-1 group-hover:text-[#F7E7C4] transition-colors uppercase leading-[0.9]"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] font-normal tracking-tight text-white mb-0.5 group-hover:text-[#F7E7C4] transition-colors uppercase leading-[0.9]"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
             {project.title}
           </h3>
           <p
-            className="text-xs sm:text-sm text-[#8C6D4F] mb-3 font-light italic"
+            className="text-xs sm:text-[13px] text-[#8C6D4F] mb-2.5 font-light italic"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
             {project.subtitle}
@@ -179,7 +179,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
 
           {/* Description */}
           <p
-            className="text-xs sm:text-sm font-light text-[#BDB0A4] leading-[1.8] tracking-wide mb-6 max-w-2xl"
+            className="text-xs sm:text-[13px] font-light text-[#BDB0A4] leading-[1.75] tracking-wide mb-4 max-w-2xl"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
             {project.description}
@@ -187,7 +187,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
         </div>
 
         {/* Tech Stack Pills */}
-        <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-4 border-t border-[#8C6D4F]/25">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 border-t border-[#8C6D4F]/25">
           {project.tech.map((t) => (
             <span
               key={t}
@@ -201,15 +201,15 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
       </div>
 
       {/* Right Column (5 Cols) */}
-      <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-4 lg:pl-6 lg:border-l lg:border-[#8C6D4F]/25 pt-3 lg:pt-0 border-t border-[#8C6D4F]/20 lg:border-t-0">
-        <div className="space-y-2.5">
+      <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-3 lg:pl-6 lg:border-l lg:border-[#8C6D4F]/25 pt-3 lg:pt-0 border-t border-[#8C6D4F]/20 lg:border-t-0">
+        <div className="space-y-2">
           <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#8C6D4F] block mb-1">
             // PROJECT DETAILS
           </span>
           {project.metrics.map((m) => (
             <div
               key={m.label}
-              className="p-2.5 sm:p-3 rounded-sm border border-[#8C6D4F]/25 bg-[#050403] flex items-center justify-between gap-2"
+              className="p-2 sm:p-2.5 rounded-sm border border-[#8C6D4F]/25 bg-[#050403] flex items-center justify-between gap-2"
             >
               <span className="text-[9px] sm:text-[9.5px] font-mono text-[#A8988B]">
                 {m.label}
@@ -222,7 +222,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
         </div>
 
         {/* Status Indicator */}
-        <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border border-[#8C6D4F]/30 bg-[#070605] rounded-sm mt-2">
+        <div className="flex items-center justify-between px-3 sm:px-4 py-2 border border-[#8C6D4F]/30 bg-[#070605] rounded-sm mt-1">
           <div className="flex items-center space-x-2">
             <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] animate-pulse shrink-0" />
             <span className="text-[9px] sm:text-[9.5px] font-mono tracking-[0.18em] sm:tracking-[0.2em] text-[#D4AF37] uppercase">
@@ -295,16 +295,11 @@ export const ProjectsSection: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* DESKTOP (lg+): Official React Bits ScrollStack Deck */}
+        {/* DESKTOP (lg+): Precision Cinematic ScrollStack Deck */}
         <div className="hidden lg:block">
           <ScrollStack
-            itemDistance={40}
-            itemScale={0.03}
-            itemStackDistance={30}
-            stackPosition="15%"
-            scaleEndPosition="8%"
-            baseScale={0.92}
-            useWindowScroll={true}
+            itemStackDistance={8}
+            baseScale={0.96}
           >
             {projects.map((project) => (
               <ScrollStackItem key={project.title}>
