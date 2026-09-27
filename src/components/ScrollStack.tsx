@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import './ScrollStack.css';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 export interface ScrollStackItemProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({
   children,
   itemClassName = '',
 }) => (
-  <div className={`scroll-stack-card ${itemClassName}`.trim()}>{children}</div>
+  <div className={`w-full ${itemClassName}`.trim()}>{children}</div>
 );
 
 export interface ScrollStackProps {
@@ -29,114 +29,114 @@ export interface ScrollStackProps {
   onStackComplete?: () => void;
 }
 
+const CardLayer: React.FC<{
+  children: React.ReactNode;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+}> = ({ children, index, total, progress }) => {
+  const stackOffset = index * 12;
+
+  // Arrival window for cards 1..total-1
+  const arriveStart = 0.12 + (index - 1) * 0.22;
+  const arriveEnd = arriveStart + 0.16;
+
+  // y position: card 0 is fixed at 0. Card i > 0 animates from 650px to stackOffset
+  const y = useTransform(
+    progress,
+    index === 0
+      ? [0, 1]
+      : [Math.max(0, arriveStart - 0.02), arriveStart, Math.min(1, arriveEnd)],
+    index === 0 ? [0, 0] : [650, 650, stackOffset]
+  );
+
+  // Opacity: fades in cleanly as it enters
+  const opacity = useTransform(
+    progress,
+    index === 0
+      ? [0, 1]
+      : [
+          Math.max(0, arriveStart - 0.02),
+          arriveStart + 0.04,
+          Math.min(1, arriveEnd),
+        ],
+    index === 0 ? [1, 1] : [0, 1, 1]
+  );
+
+  // Subsequent cards arriving cause this card to scale down and dim
+  const numSubsequent = total - 1 - index;
+  const finalScale = Math.max(0.88, 1 - numSubsequent * 0.03);
+  const finalBrightness = Math.max(0.68, 1 - numSubsequent * 0.08);
+
+  const scaleStart = index === 0 ? 0.12 : arriveEnd;
+  const scaleEnd = 0.94;
+
+  const scale = useTransform(
+    progress,
+    numSubsequent === 0 ? [0, 1] : [scaleStart, scaleEnd],
+    numSubsequent === 0 ? [1, 1] : [1, finalScale]
+  );
+
+  const brightnessVal = useTransform(
+    progress,
+    numSubsequent === 0 ? [0, 1] : [scaleStart, scaleEnd],
+    numSubsequent === 0 ? [1, 1] : [1, finalBrightness]
+  );
+
+  const filter = useTransform(brightnessVal, (b) => `brightness(${b})`);
+
+  return (
+    <motion.div
+      style={{
+        y,
+        scale,
+        opacity,
+        filter,
+        zIndex: index + 10,
+        transformOrigin: 'top center',
+      }}
+      className={
+        index === 0 ? 'relative w-full' : 'absolute inset-x-0 top-0 w-full'
+      }
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 export const ScrollStack: React.FC<ScrollStackProps> = ({
   children,
   className = '',
-  itemStackDistance = 8,
-  baseScale = 0.96,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const childArray = React.Children.toArray(children);
-  const totalCards = childArray.length;
+  const total = childArray.length;
 
-  const [scales, setScales] = useState<number[]>(() =>
-    new Array(totalCards).fill(1)
-  );
-  const [opacities, setOpacities] = useState<number[]>(() =>
-    new Array(totalCards).fill(1)
-  );
-
-  const updateCardTransforms = useCallback(() => {
-    if (!cardRefs.current.length) return;
-
-    const newScales = new Array(totalCards).fill(1);
-    const newOpacities = new Array(totalCards).fill(1);
-    const viewportHeight = window.innerHeight;
-
-    for (let i = 0; i < totalCards; i++) {
-      const cardEl = cardRefs.current[i];
-      if (!cardEl) continue;
-
-      // Check how far the NEXT card (i + 1) has scrolled toward its sticky pin
-      if (i < totalCards - 1) {
-        const nextCardEl = cardRefs.current[i + 1];
-        if (nextCardEl) {
-          const nextRect = nextCardEl.getBoundingClientRect();
-          const nextStickyTop = 75 + (i + 1) * itemStackDistance;
-
-          // As nextCard approaches its sticky position, gently scale and dim current card
-          const distanceToPin = nextRect.top - nextStickyTop;
-          if (distanceToPin < viewportHeight * 0.45) {
-            const progress = Math.max(
-              0,
-              Math.min(1, 1 - distanceToPin / (viewportHeight * 0.45))
-            );
-            const targetScale = 1 - progress * (1 - baseScale);
-            newScales[i] = Math.round(targetScale * 1000) / 1000;
-            newOpacities[i] = Math.round((1 - progress * 0.16) * 100) / 100;
-          }
-        }
-      }
-    }
-
-    setScales(newScales);
-    setOpacities(newOpacities);
-  }, [totalCards, itemStackDistance, baseScale]);
-
-  useEffect(() => {
-    let animationFrameId: number;
-
-    const onScroll = () => {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = requestAnimationFrame(updateCardTransforms);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    updateCardTransforms();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
-  }, [updateCardTransforms]);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
 
   return (
     <div
       ref={containerRef}
-      className={`scroll-stack-wrapper relative w-full ${className}`.trim()}
+      className={`relative w-full ${className}`.trim()}
+      style={{ height: `${total * 75}vh` }}
     >
-      {childArray.map((child, index) => {
-        const stickyTop = 75 + index * itemStackDistance;
-        const scale = scales[index] ?? 1;
-        const opacity = opacities[index] ?? 1;
-
-        return (
-          <div
-            key={index}
-            ref={(el) => {
-              cardRefs.current[index] = el;
-            }}
-            className="scroll-stack-sticky-item sticky"
-            style={{
-              top: `${stickyTop}px`,
-              zIndex: index + 10,
-              marginBottom:
-                index === totalCards - 1
-                  ? '4rem'
-                  : 'clamp(180px, 30vh, 260px)',
-              transform: `scale(${scale})`,
-              transformOrigin: 'top center',
-              filter: `brightness(${opacity})`,
-              transition: 'transform 0.15s ease-out, filter 0.15s ease-out',
-            }}
-          >
-            {child}
-          </div>
-        );
-      })}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+        <div className="relative w-full max-w-6xl mx-auto">
+          {childArray.map((child, index) => (
+            <CardLayer
+              key={index}
+              index={index}
+              total={total}
+              progress={scrollYProgress}
+            >
+              {child}
+            </CardLayer>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
