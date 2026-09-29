@@ -226,7 +226,7 @@ export const ExperienceSection: React.FC = () => {
                   {/* Type Badge */}
                   {stop.type === 'research' && (
                     <span
-                      className="inline-block text-[9px] font-medium tracking-[0.2em] uppercase text-[#D4AF37] border border-[#D4AF37]/30 px-2 py-0.5 rounded-sm mb-2"
+                      className="inline-block text-[10px] font-medium tracking-[0.2em] uppercase text-[#D4AF37] border border-[#D4AF37]/30 px-2 py-0.5 rounded-sm mb-2"
                       style={{ fontFamily: "'Montserrat', sans-serif" }}
                     >
                       RESEARCH
@@ -248,7 +248,7 @@ export const ExperienceSection: React.FC = () => {
                   </span>
 
                   <span
-                    className="block text-[9px] font-light tracking-[0.16em] uppercase text-[#6B5E55] mb-3"
+                    className="block text-[10px] font-light tracking-[0.16em] uppercase text-[#6B5E55] mb-3"
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                   >
                     {stop.location}

@@ -170,7 +170,7 @@ export const EducationSection: React.FC = () => {
 
                   {entry.location && (
                     <span
-                      className="block text-[9px] font-light tracking-[0.16em] uppercase text-[#6B5E55] mt-0.5"
+                      className="block text-[10px] font-light tracking-[0.16em] uppercase text-[#6B5E55] mt-0.5"
                       style={{ fontFamily: "'Montserrat', sans-serif" }}
                     >
                       {entry.location}

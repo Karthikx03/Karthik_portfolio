@@ -114,6 +114,46 @@ const projects: Project[] = [
       { label: 'DURATION', value: '2024–2025' },
     ],
   },
+  {
+    number: '06',
+    title: 'SKILLQUEST',
+    subtitle: 'Gamified Learning Platform for the Skills School Never Taught',
+    category: 'FULL-STACK / EDTECH / GAMIFICATION',
+    company: 'PERSONAL PROJECT | LIVE ON GITHUB PAGES',
+    description:
+      'A free, gamified learning platform offering 24 courses across 6 subjects — Financial Literacy, AI Fundamentals, Cybersecurity, Digital Skills, Career Readiness, and Entrepreneurship. Learners earn points, beat quizzes, climb a leaderboard, and unlock certificates. Backed by an Express + PostgreSQL API with JWT authentication and bcrypt password hashing.',
+    tech: [
+      'JavaScript', 'Node.js', 'Express', 'PostgreSQL',
+      'JWT Auth', 'bcrypt', 'REST API', 'GitHub Pages',
+    ],
+    metrics: [
+      { label: 'COURSES', value: '24 Free' },
+      { label: 'SUBJECTS', value: '6 Tracks' },
+      { label: 'GAMIFICATION', value: 'Points + Leaderboard' },
+      { label: 'BACKEND', value: 'Express + Postgres' },
+      { label: 'STATUS', value: 'Live' },
+    ],
+  },
+  {
+    number: '07',
+    title: 'MANGSHI 盲食',
+    subtitle: 'Surplus-Harvest Rescue Served as Blind Hakka Heritage Meals',
+    category: 'FULL-STACK / SOCIAL IMPACT / SUPABASE',
+    company: 'STUDENT-LED INITIATIVE | TAIWAN | 2026',
+    description:
+      'A student-led initiative rescuing surplus produce from Taiwanese farms and serving it as sealed, blind Hakka heritage meals. Pairs a Chinese-first marketing site with an operational system: farmers log surplus, campuses log preorders, and a deterministic matching engine turns supply and demand into a kitchen production plan with impact tracking. Took the project through a debugging and audit pass — fixing TypeScript errors, SSR hydration, the join form, and Cloudflare Worker deployment.',
+    tech: [
+      'React 19', 'TypeScript', 'TanStack Start', 'Supabase',
+      'PostgreSQL + RLS', 'Tailwind CSS', 'Cloudflare Workers', 'SSR',
+    ],
+    metrics: [
+      { label: 'DOMAIN', value: 'Food Rescue' },
+      { label: 'ENGINE', value: 'Supply-Demand Matcher' },
+      { label: 'DATABASE', value: 'Supabase + RLS' },
+      { label: 'DEPLOY', value: 'Cloudflare Workers' },
+      { label: 'YEAR', value: '2026' },
+    ],
+  },
 ];
 
 // Shared card inner component
@@ -156,7 +196,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
           {/* Company Badge */}
           <div className="mb-2">
             <span
-              className="inline-block text-[8px] sm:text-[9px] font-medium tracking-[0.18em] sm:tracking-[0.2em] uppercase text-[#C99E5D] border border-[#C99E5D]/30 px-2 py-0.5 rounded-sm"
+              className="inline-block text-[10px] sm:text-[10px] font-medium tracking-[0.18em] sm:tracking-[0.2em] uppercase text-[#C99E5D] border border-[#C99E5D]/30 px-2 py-0.5 rounded-sm"
               style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               {project.company}
@@ -191,7 +231,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
           {project.tech.map((t) => (
             <span
               key={t}
-              className="px-2 sm:px-2.5 py-0.5 text-[9px] sm:text-[9.5px] font-medium tracking-[0.14em] sm:tracking-[0.16em] uppercase rounded-sm border border-[#8C6D4F]/40 bg-[#16120E] text-[#E8D7C5] group-hover:border-[#D4AF37]/50 transition-all duration-300"
+              className="px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[10.5px] font-medium tracking-[0.14em] sm:tracking-[0.16em] uppercase rounded-sm border border-[#8C6D4F]/40 bg-[#16120E] text-[#E8D7C5] group-hover:border-[#D4AF37]/50 transition-all duration-300"
               style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               {t}
@@ -203,7 +243,7 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
       {/* Right Column (5 Cols) */}
       <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-3 lg:pl-6 lg:border-l lg:border-[#8C6D4F]/25 pt-3 lg:pt-0 border-t border-[#8C6D4F]/20 lg:border-t-0">
         <div className="space-y-2">
-          <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#8C6D4F] block mb-1">
+          <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-[#8C6D4F] block mb-1">
             // PROJECT DETAILS
           </span>
           {project.metrics.map((m) => (
@@ -211,10 +251,10 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
               key={m.label}
               className="p-2 sm:p-2.5 rounded-sm border border-[#8C6D4F]/25 bg-[#050403] flex items-center justify-between gap-2"
             >
-              <span className="text-[9px] sm:text-[9.5px] font-mono text-[#A8988B]">
+              <span className="text-[10px] sm:text-[10.5px] font-mono text-[#A8988B]">
                 {m.label}
               </span>
-              <span className="text-[9.5px] sm:text-[10.5px] font-mono font-medium text-[#F7E7C4] text-right">
+              <span className="text-[10.5px] sm:text-[10.5px] font-mono font-medium text-[#F7E7C4] text-right">
                 {m.value}
               </span>
             </div>
@@ -225,11 +265,11 @@ const ProjectCardContent: React.FC<{ project: Project }> = ({ project }) => (
         <div className="flex items-center justify-between px-3 sm:px-4 py-2 border border-[#8C6D4F]/30 bg-[#070605] rounded-sm mt-1">
           <div className="flex items-center space-x-2">
             <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] animate-pulse shrink-0" />
-            <span className="text-[9px] sm:text-[9.5px] font-mono tracking-[0.18em] sm:tracking-[0.2em] text-[#D4AF37] uppercase">
+            <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.18em] sm:tracking-[0.2em] text-[#D4AF37] uppercase">
               ACTIVE
             </span>
           </div>
-          <span className="text-[9px] sm:text-[9.5px] font-mono text-[#8C6D4F]">
+          <span className="text-[10px] sm:text-[10.5px] font-mono text-[#8C6D4F]">
             KARTHIKEYAN P
           </span>
         </div>

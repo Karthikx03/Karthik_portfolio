@@ -42,12 +42,37 @@ export const HeroSection: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Custom cursor: only while the pointer is inside the hero (fine pointers only)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
+    const section = sectionRef.current;
+    if (!section || !window.matchMedia('(pointer: fine)').matches) return;
+    const move = (e: MouseEvent) => setCursorPos({ x: e.clientX, y: e.clientY });
+    const leave = () => { setCursorPos({ x: -100, y: -100 }); setIsHovered(false); };
+    section.addEventListener('mousemove', move);
+    section.addEventListener('mouseleave', leave);
+    return () => {
+      section.removeEventListener('mousemove', move);
+      section.removeEventListener('mouseleave', leave);
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Reliable autoplay (iOS / Safari need the muted *property* set before play)
+  // and pause the video while the hero is off-screen to save battery/CPU.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    const tryPlay = () => { video.play().catch(() => {}); };
+    tryPlay();
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? tryPlay() : video.pause()),
+      { threshold: 0.05 }
+    );
+    io.observe(video);
+    return () => io.disconnect();
   }, []);
 
   // Close mobile menu on outside click
@@ -61,7 +86,8 @@ export const HeroSection: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative w-screen h-screen overflow-hidden bg-black text-[#E8DFD8] font-sans selection:bg-[#cbb59d] selection:text-black cursor-none"
+      ref={sectionRef}
+      className="relative w-full h-screen h-svh min-h-[560px] overflow-hidden bg-black text-[#E8DFD8] font-sans selection:bg-[#cbb59d] selection:text-black lg:cursor-none"
     >
       {/* ================= 1. MINIMAL CUSTOM CURSOR ================= */}
       {cursorPos.x >= 0 && (
@@ -81,25 +107,33 @@ export const HeroSection: React.FC = () => {
       )}
 
       {/* ================= 2. FIXED VIDEO LAYER ================= */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-black flex items-center justify-end">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-black">
         <video
           ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
-          className="h-screen w-auto max-w-none object-contain origin-right scale-95 md:scale-[0.98] lg:scale-100"
+          preload="auto"
+          poster="/videos/hero-poster.jpg"
+          className="absolute inset-0 w-full h-full object-cover object-[52%_center] lg:object-[0%_center]"
           aria-hidden="true"
         >
+          <source src="/videos/hero.webm" type="video/webm" />
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
 
-        {/* Seamless Soft Left Edge Blend */}
-        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-black via-black/85 to-transparent pointer-events-none" />
+        {/* Desktop: soft left-edge blend behind the headline */}
+        <div className="hidden lg:block absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-black via-black/70 to-transparent pointer-events-none" />
+        {/* Mobile / tablet: bottom-up blend so text stays readable over the figure */}
+        <div className="lg:hidden absolute inset-0 bg-gradient-to-t from-black from-10% via-black/75 via-45% to-black/10 pointer-events-none" />
+        {/* Top shade for the nav + bottom fade into the next section */}
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/70 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
         {/* ================= 3. RESPONSIVE WATERMARK OVERLAY EMBLEM ================= */}
         <div
-          className="absolute pointer-events-none flex items-center justify-center z-10"
+          className="hidden lg:flex absolute pointer-events-none items-center justify-center z-10"
           style={{
             bottom: 'clamp(1.5rem, 6vh, 5rem)',
             right: 'clamp(1rem, 4vw, 5rem)',
@@ -159,7 +193,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <nav
-            className="hidden md:flex items-center space-x-8 lg:space-x-10 text-[11px] tracking-[0.28em] font-light uppercase text-[#C4B5A5] absolute left-1/2 -translate-x-1/2"
+            className="hidden lg:flex items-center space-x-7 xl:space-x-10 text-[11px] tracking-[0.28em] font-light uppercase text-[#C4B5A5] absolute left-1/2 -translate-x-1/2"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
             aria-label="Main navigation"
           >
@@ -179,7 +213,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Mobile Hamburger */}
           <button
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 z-50"
+            className="lg:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 z-50"
             aria-label="Toggle navigation menu"
             aria-expanded={menuOpen}
             onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
@@ -210,6 +244,14 @@ export const HeroSection: React.FC = () => {
                   {item.name}
                 </a>
               ))}
+              <a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                className="text-[11px] font-medium tracking-[0.28em] uppercase text-[#D8AB64] hover:text-[#FFF5EB] transition-colors pt-2 border-t border-[#8C6D4F]/30"
+                style={{ fontFamily: "'Montserrat', sans-serif" }}
+              >
+                LET&apos;S TALK ↗
+              </a>
             </motion.div>
           )}
 
@@ -218,7 +260,7 @@ export const HeroSection: React.FC = () => {
             href="#contact"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="hidden md:flex group items-center space-x-2 text-[11px] tracking-[0.24em] font-light uppercase py-2 px-4 border border-[#8C6D4F]/50 hover:border-[#D4AF37] text-[#EAD8C7] transition-all duration-300 backdrop-blur-sm"
+            className="hidden lg:flex group items-center space-x-2 text-[11px] tracking-[0.24em] font-light uppercase py-2 px-4 border border-[#8C6D4F]/50 hover:border-[#D4AF37] text-[#EAD8C7] transition-all duration-300 backdrop-blur-sm"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
             aria-label="Contact Karthikeyan P"
           >
@@ -230,7 +272,7 @@ export const HeroSection: React.FC = () => {
         </header>
 
         {/* Main Hero Row */}
-        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full pt-2 pb-2 my-auto">
+        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between w-full pt-2 pb-6 lg:pb-2 mt-auto lg:my-auto">
 
           {/* LEFT: Headline & Actions */}
           <motion.div
@@ -242,7 +284,7 @@ export const HeroSection: React.FC = () => {
             {/* Massive Condensed Headline */}
             <motion.div variants={fadeUpVariants} className="relative mb-2 select-none">
               <h1
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-[4.8rem] xl:text-[5.4rem] tracking-tight uppercase leading-[0.84]"
+                className="text-5xl sm:text-6xl md:text-[4.8rem] lg:text-[5.9rem] xl:text-[6.7rem] tracking-tight uppercase leading-[0.84]"
                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
               >
                 {/* Line 1 */}
@@ -268,7 +310,7 @@ export const HeroSection: React.FC = () => {
                 className="text-[10px] sm:text-[11px] md:text-xs font-normal tracking-[0.28em] uppercase text-[#C4B29E]"
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
               >
-                AI · IOT & EMBEDDED <span className="text-[#8C6D4F] mx-1">•</span> PATENT HOLDER <span className="text-[#8C6D4F] mx-1">•</span> RESEARCH INTERN
+                AI · IOT & EMBEDDED <span className="text-[#8C6D4F] mx-1">•</span> PATENT HOLDER <span className="text-[#8C6D4F] mx-1">•</span> RESEARCHER
               </p>
             </motion.div>
 
@@ -333,7 +375,7 @@ export const HeroSection: React.FC = () => {
 
             {/* Two-Line Statement */}
             <div
-              className="text-[9.5px] font-medium tracking-[0.24em] uppercase text-[#E0D3C5] space-y-1 mb-3"
+              className="text-[10.5px] font-medium tracking-[0.24em] uppercase text-[#E0D3C5] space-y-1 mb-3"
               style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               <p>INNOVATION IS MY CRAFT.</p>

@@ -125,7 +125,9 @@ export const ContactSection: React.FC = () => {
 
       const data = await response.json();
 
-      if (response.ok || data.success === 'true' || data.success === true) {
+      // FormSubmit replies 200 even when it rejects a message (e.g. before the
+      // inbox is activated), so trust only its explicit success flag.
+      if (response.ok && (data.success === 'true' || data.success === true)) {
         setFormState('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
@@ -308,7 +310,7 @@ export const ContactSection: React.FC = () => {
                   <div>
                     <label
                       htmlFor="contact-name"
-                      className="block text-[9.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
+                      className="block text-[10.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
                     >
                       // SENDER NAME *
                     </label>
@@ -330,7 +332,7 @@ export const ContactSection: React.FC = () => {
                   <div>
                     <label
                       htmlFor="contact-email"
-                      className="block text-[9.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
+                      className="block text-[10.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
                     >
                       // REPLY CHANNEL *
                     </label>
@@ -354,7 +356,7 @@ export const ContactSection: React.FC = () => {
                 <div>
                   <label
                     htmlFor="contact-subject"
-                    className="block text-[9.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
+                    className="block text-[10.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
                   >
                     // SUBJECT
                   </label>
@@ -375,7 +377,7 @@ export const ContactSection: React.FC = () => {
                 <div>
                   <label
                     htmlFor="contact-message"
-                    className="block text-[9.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
+                    className="block text-[10.5px] font-mono tracking-[0.2em] uppercase text-[#8C6D4F] mb-2"
                   >
                     // PAYLOAD *
                   </label>

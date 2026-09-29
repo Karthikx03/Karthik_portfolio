@@ -196,13 +196,13 @@ export const CertificationsSection: React.FC = () => {
                 </div>
                 <div>
                   <div
-                    className="text-[9px] font-medium tracking-[0.2em] uppercase"
+                    className="text-[10px] font-medium tracking-[0.2em] uppercase"
                     style={{ fontFamily: "'Montserrat', sans-serif", color: item.color }}
                   >
                     {item.issuer}
                   </div>
                   <div
-                    className="text-[8px] font-mono tracking-[0.15em] text-[#6B5E55]"
+                    className="text-[10px] font-mono tracking-[0.15em] text-[#6B5E55]"
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                   >
                     {item.issuerShort === 'PAT' ? 'PATENT' : item.issuerShort === 'PUB' ? 'PUBLICATION' : 'ACHIEVEMENT'}
@@ -221,7 +221,7 @@ export const CertificationsSection: React.FC = () => {
               {/* Validity */}
               <div className="pt-3 border-t border-[#8C6D4F]/20">
                 <span
-                  className="text-[9.5px] font-light tracking-[0.15em] text-[#8C6D4F] group-hover:text-[#A8988B] transition-colors"
+                  className="text-[10.5px] font-light tracking-[0.15em] text-[#8C6D4F] group-hover:text-[#A8988B] transition-colors"
                   style={{ fontFamily: "'Montserrat', sans-serif" }}
                 >
                   {item.validity}
@@ -256,7 +256,7 @@ export const CertificationsSection: React.FC = () => {
             <div className="flex flex-col justify-between h-full space-y-4">
               <div>
                 <div
-                  className="text-[9px] font-medium tracking-[0.2em] uppercase text-[#D4AF37] mb-3"
+                  className="text-[10px] font-medium tracking-[0.2em] uppercase text-[#D4AF37] mb-3"
                   style={{ fontFamily: "'Montserrat', sans-serif" }}
                 >
                   IMPACT SUMMARY
@@ -281,7 +281,7 @@ export const CertificationsSection: React.FC = () => {
                     className="text-[10px] font-light text-[#A8988B] flex items-center space-x-2"
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                   >
-                    <span className="text-[#D4AF37] text-[8px]">▸</span>
+                    <span className="text-[#D4AF37] text-[10px]">▸</span>
                     <span>{item}</span>
                   </div>
                 ))}
